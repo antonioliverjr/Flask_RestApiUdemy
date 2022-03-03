@@ -264,4 +264,7 @@ node_modules/
 jspm_packages/
 media/
 
+# Database SQLAlchemy
+database.db
+
 # End of https://www.toptal.com/developers/gitignore/api/jupyternotebooks,pycharm,python
