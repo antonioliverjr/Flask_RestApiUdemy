@@ -1,14 +1,16 @@
 from flask import Flask
-from flask_restful import Resource, Api
+from config.routers import Urls
+from config.context import Context, sql
 
 app = Flask(__name__)
-api = Api(app)
+Context.config(app)
 
-class Hoteis(Resource):
-    def get(self):
-        return {'hoteis': 'meus hoteis'}
+@app.before_first_request
+def create_database():
+    sql.create_all()
 
-api.add_resource(Hoteis, '/hoteis')
+Urls.routers(app)
 
 if __name__ == '__main__':
+    sql.init_app(app)
     app.run(debug=True)
