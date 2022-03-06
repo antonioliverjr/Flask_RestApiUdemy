@@ -1,16 +1,12 @@
+#from __future__ import annotations
 from flask import Flask
 from config.routers import Urls
-from config.context import Context, sql
+from data.context import Context
 
 app = Flask(__name__)
-Context.config(app)
-
-@app.before_first_request
-def create_database():
-    sql.create_all()
 
 Urls.routers(app)
 
 if __name__ == '__main__':
-    sql.init_app(app)
+    Context.init_database()
     app.run(debug=True)
