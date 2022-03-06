@@ -1,29 +1,23 @@
-from typing import List
-from config.context import sql
+from enum import auto
+from sqlalchemy import Column, ForeignKey, String, Integer, Float, Sequence
+from sqlalchemy.orm import relationship
+from data.context import Base
 from models.city import CityModel
 
-cities = sql.Table('cities',
-    sql.Column('hotel_id', sql.Integer, sql.ForeignKey('hotels.id'), primary_key=True),
-    sql.Column('city_id', sql.Integer, sql.ForeignKey('city.id'), primary_key=True)
-)
 
-class HotelModel(sql.Model):
+class HotelModel(Base):
     __tablename__ = 'hotels'
 
-    id = sql.Column(sql.String, primary_key=True)
-    name = sql.Column(sql.String(80))
-    stars = sql.Column(sql.Integer)
-    daily = sql.Column(sql.Float(precision=2))
-    cities = sql.relationship('city', secondary=cities, lazy='subquery',
-        backref=sql.backref('hotels', lazy=True))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(80), nullable=False)
+    stars = Column(Integer, nullable=False)
+    daily = Column(Float(precision=2), nullable=False)
+    city_id = Column(Integer, ForeignKey('cities.id'))
 
-    '''
-    def __init__(self, name:str, stars:int, daily:str, city:List[CityModel]) -> None:
-        self.name = name
-        self.stars = stars
-        self.daily = daily
-        self.city = city
+    city = relationship('CityModel', backref='hotels')
 
     def to_dict(self):
         return self.__dict__
-    '''
+
+    def __str__(self) -> str:
+        return self.name+' - '+self.city.name
