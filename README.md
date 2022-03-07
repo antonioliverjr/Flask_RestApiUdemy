@@ -10,17 +10,18 @@
 - **API**
 - **Micro-serviços**
 
-> *Anotações do projeto*
-# Bibliotecas Utilizadas
+# Anotações do projeto
+
+> Bibliotecas Utilizadas
 - Flask
 - Flask_Restful
 - SQLAlchemy
 - Alembic
 
-# Comandos Bash
-'''bash
+> Comandos Bash
+```bash
 alembic revision --autogenerate -m "<nome-da-migration>"
 alembic upgrade head
-'''
+```
 
 
