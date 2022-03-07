@@ -50,7 +50,7 @@ class CityController(Resource):
         cityRepository = CityRepository()
         if cityRepository.list_id(id):
             try:
-                cityRepository.delete(id)
+                cityRepository.remove(id)
             except Exception as ex:
                 result = {'message': str(ex)}
                 return marshal(result, CityOutputDto.message()), 400

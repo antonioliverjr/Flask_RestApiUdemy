@@ -34,7 +34,7 @@ class CityRepository():
             return ex
         return self.list_id(id)
     
-    def delete(self, id:int) -> Union[bool, Exception]:
+    def remove(self, id:int) -> Union[bool, Exception]:
         try:
             self.conn.session.query(CityModel).filter_by(id=id).delete(synchronize_session=False)
             self.conn.save()
