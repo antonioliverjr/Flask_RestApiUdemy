@@ -5,9 +5,9 @@ name = "pypi"
 
 [packages]
 flask = "*"
-flask-restful = "*"
-flask-sqlalchemy = "*"
 sqlalchemy = "*"
+flask-restful = "*"
+alembic = "*"
 
 [dev-packages]
 
