@@ -1,7 +1,8 @@
 from flask_restful import reqparse, fields
+from views.base_dto import BaseDto
 
 
-class CityInputDto():
+class CityModelViewDto(BaseDto):
     @staticmethod
     def request():
         arguments = reqparse.RequestParser()
@@ -10,7 +11,6 @@ class CityInputDto():
 
         return arguments.parse_args()
 
-class CityOutputDto():
     @staticmethod
     def response():
         response = {
@@ -19,10 +19,3 @@ class CityOutputDto():
             'uf': fields.String
         }
         return response
-    
-    @staticmethod
-    def message():
-        message = {
-            'message': fields.String
-        }
-        return message

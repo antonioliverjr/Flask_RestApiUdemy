@@ -1,7 +1,8 @@
 from flask_restful import reqparse, fields
+from views.base_dto import BaseDto
 
 
-class HotelsInputDto():
+class HotelModelViewDto(BaseDto):
     @staticmethod
     def request():
         arguments = reqparse.RequestParser()
@@ -12,7 +13,6 @@ class HotelsInputDto():
         arguments.add_argument('status', type=bool, help='Status is not required and default value is True')
         return arguments.parse_args()
 
-class HotelsOutputDto():
     @staticmethod
     def response():
         response = {
@@ -28,10 +28,3 @@ class HotelsOutputDto():
             'status': fields.Boolean
         }
         return response
-    
-    @staticmethod
-    def message():
-        message = {
-            'message': fields.String
-        }
-        return message
