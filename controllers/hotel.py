@@ -10,31 +10,55 @@ class HotelController(Resource):
         if id is not None:
             result = hotelRepository.list_id(id)
             if result is None:
-                return {'Error': f'Hotel com o Id: {id} não localizado'}, 400
-            return result.to_dict()
+                result = {'message': f'Id não localizado, verifique Id:{id} foi o informado.'}
+                return marshal(result, HotelsOutputDto.message()), 404
+            return marshal(result, HotelsOutputDto.response()), 200
         
         result = hotelRepository.list()
         if len(result) == 0:
-            return {'Error': 'Não há items para listar'}, 400
-        return result
+            return marshal(result, HotelsOutputDto.response()), 404
+        return marshal(result, HotelsOutputDto.response()), 200
     
     def post(self):
-        data = HotelsInputDto.data()
+        data = HotelsInputDto.request()
         hotelRepository = HotelRepository()
         cityRepository = CityRepository()
-        city_object = cityRepository.search(data.city)
-        if city_object is None:
-            return {'error': 'A Cidade informada não encontra-se cadastrada.'}, 400
-        
+        city_obj = cityRepository.search(data.city)
+        if city_obj is None:
+            result = {'message': f'A Cidade {data.city} informada não encontra-se cadastrada.'}
+            return marshal(result, HotelsOutputDto.message()), 400
         try:
-            result = hotelRepository.create(data.name, data.stars, data.daily, city_object)
+            result = hotelRepository.create(data.name, data.stars, data.daily, city_obj)
         except Exception as ex:
-            return {'Error': ex}, 400
-        
-        return result, 201
+            result = {'message': str(ex)}
+            return marshal(result, HotelsOutputDto.message()), 400
+        return marshal(result, HotelsOutputDto.response()), 201
     
     def put(self, id:int):
-        pass
+        data = HotelsInputDto.request()
+        hotelRepository = HotelRepository()
+        cityRepository = CityRepository()
+        city_obj = cityRepository.search(data.city)
+        if city_obj is None:
+            result = {'message': f'A Cidade {data.city} informada não encontra-se cadastrada.'}
+            return marshal(result, HotelsOutputDto.message()), 400
+        try:
+            result = hotelRepository.update(id, data.name, data.stars, data.daily, city_obj
+            , data.status if data.status is not None else True)
+        except Exception as ex:
+            result = {'message': str(ex)}
+            return marshal(result, HotelsOutputDto.message()), 400
+        return marshal(result, HotelsOutputDto.response()), 201
 
     def delete(self, id:int):
-        pass
+        hotelRepository = HotelRepository()
+        if hotelRepository.list_id(id):
+            try:
+                hotelRepository.remove(id)
+            except Exception as ex:
+                result = {'message': str(ex)}
+                return marshal(result, HotelsOutputDto.message()), 400
+            result = {'message': 'O cadastro foi removido com sucesso.'}
+            return marshal(result, HotelsOutputDto.message()), 200
+        result = {'message': f'Id não localizado, verifique Id:{id} foi o informado.'}
+        return marshal(result, HotelsOutputDto.message()), 404
