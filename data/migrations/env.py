@@ -18,8 +18,7 @@ fileConfig(config.config_file_name)
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from data.context import Base
-from models.hotel import HotelModel
-from models.city import CityModel
+import models.__models_all
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
