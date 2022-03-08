@@ -3,7 +3,7 @@
 
 **Aprimorando o conceito Clean, utilizando sintaxe Python**
 
-## Praticando API! Python com principios da Clean Architeture!
+## Praticando API! Python com princípios da Clean Architeture!
 
 > *Projeto pessoal para utilizar como **Base Python** na criação de:*
 
@@ -15,8 +15,11 @@
 > Bibliotecas Utilizadas
 - Flask
 - Flask_Restful
+- Flask_Apispec
+- Marshmallow
 - SQLAlchemy
 - Alembic
+- Python-Decouple
 
 > Comandos Bash
 ```bash
