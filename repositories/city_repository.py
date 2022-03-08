@@ -1,6 +1,6 @@
 from typing import Union, List
 from data.context import Context
-from models.city import CityModel
+from models.city_model import CityModel
 
 
 class CityRepository():

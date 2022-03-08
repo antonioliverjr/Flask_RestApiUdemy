@@ -1,2 +1,2 @@
-from models.hotel import HotelModel
-from models.city import CityModel
+from models.hotel_model import HotelModel
+from models.city_model import CityModel
