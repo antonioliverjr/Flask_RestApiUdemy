@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_restx import Api
+from config.token import Authenticate
+from services.identity.seed_user_roles import SeedUserRolesInitial
 
 
 class Settings:
@@ -20,6 +22,8 @@ class Settings:
             description='API baseada na Clean Architeture com Python',
             contact='Antonio Oliveira',
             contact_email='antoniobatistajr@gmail.com',
+            security=['http'],
+            authorizations=Authenticate.get_auth()
         )
         return api
 
@@ -28,4 +32,14 @@ class Settings:
         for arg in args:
             api.add_namespace(arg)
         return api
+
+    @staticmethod
+    def seed_roles():
+        seed = SeedUserRolesInitial()
+        seed.seed_roles()
+
+    @staticmethod
+    def seed_users():
+        seed = SeedUserRolesInitial()
+        seed.seed_users()
         
