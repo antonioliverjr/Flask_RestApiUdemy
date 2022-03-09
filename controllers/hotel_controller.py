@@ -1,13 +1,11 @@
-from config.app import server
-from flask_restx import Resource, marshal
+from flask_restx import Namespace, Resource, marshal
 from views.hotel_dto import HotelDto
 from views.help_dto import HelpsDto
 from services.hotel_service import HotelService
 from services.city_service import CityService
 
 
-api = server.api
-hotel = api.namespace('hotels', description="Hotels operations Get, Get/{id}, Post, Put, Delete")
+hotel = Namespace('hotels', description="Hotels operations Get, Get/{id}, Post, Put, Delete")
 hotel_dto = hotel.model('hotel', HotelDto.response())
 
 @hotel.route('/')

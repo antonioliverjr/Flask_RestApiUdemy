@@ -1,11 +1,10 @@
-from config.app import server
-from flask_restx import Resource, marshal
+from flask_restx import Namespace, Resource, marshal
 from views.city_dto import CityDto
 from views.help_dto import HelpsDto
 from services.city_service import CityService
 
-api = server.api
-city = api.namespace('cities', description="Cities operations Get, Get/{id}, Post, Put, Delete")
+
+city = Namespace('cities', description="Cities operations Get, Get/{id}, Post, Put, Delete")
 city_dto = city.model('city', CityDto.response())
 
 @city.route('/')

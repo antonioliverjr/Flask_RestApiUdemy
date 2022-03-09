@@ -1,2 +1,2 @@
-from controllers.hotel_controller import HotelController , HotelControllerId
-from controllers.city_controller import CityController , CityControllerId
+from controllers.hotel_controller import hotel
+from controllers.city_controller import city
