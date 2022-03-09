@@ -1,5 +1,5 @@
 from config.app import server
-from flask_restx import Resource
+from flask_restx import Resource, marshal
 from views.city_dto import CityDto
 from views.help_dto import HelpsDto
 from services.city_service import CityService
@@ -12,7 +12,7 @@ city_dto = city.model('city', CityDto.response())
 class CityController(Resource):
     @city.doc('Cities List')
     @city.expect(HelpsDto.pagination())
-    @city.response(code=200, description='City list is Successfully return.', model=city_dto)
+    @city.response(code=200, description='City list is Successfully return.', model=[city_dto])
     @city.response(code=404, description='City list is empty')
     def get(self):
         cityService = CityService()
@@ -20,9 +20,9 @@ class CityController(Resource):
         data = args.parse_args()
         city = cityService.list(offset=data['page'], limit=data['limit'])
         if len(city) != 0:            
-            return city, 200
+            return marshal(city, city_dto), 200
         else:
-            return city, 404
+            return marshal(city, city_dto), 404
 
     @city.doc('Insert a City')
     @city.expect(CityDto.request())
@@ -38,7 +38,7 @@ class CityController(Resource):
             city = cityService.create(data['name'], data['uf'])
         except Exception as ex:
             return HelpsDto.message(str(ex)), 400
-        return city, 201
+        return marshal(city, city_dto), 201
 
 @city.route('/<int:id>')
 @city.param('id', 'City Id')
@@ -51,7 +51,7 @@ class CityControllerId(Resource):
         city = cityService.list_id(id)
         if city is None:
             return HelpsDto.message(f'Id not found, Id: {id} was provided.'), 404
-        return city, 200
+        return marshal(city, city_dto), 200
 
     @city.doc('Uptade a City')
     @city.expect(CityDto.request())
@@ -67,7 +67,7 @@ class CityControllerId(Resource):
                 city = cityService.update(id, **data)
             except Exception as ex:
                 return HelpsDto.message(str(ex)), 400
-            return city, 200
+            return marshal(city, city_dto), 200
         return HelpsDto.message(f'Id not found, Id: {id} was provided.'), 404
 
     @city.doc('Remove a City')

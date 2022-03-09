@@ -1,5 +1,5 @@
 from config.app import server
-from flask_restx import Resource
+from flask_restx import Resource, marshal
 from views.hotel_dto import HotelDto
 from views.help_dto import HelpsDto
 from services.hotel_service import HotelService
@@ -14,7 +14,7 @@ hotel_dto = hotel.model('hotel', HotelDto.response())
 class HotelController(Resource):
     @hotel.doc('Hotel List')
     @hotel.expect(HelpsDto.pagination())
-    @hotel.response(code=200, description='Hotel list is Successfully return.', model=hotel_dto)
+    @hotel.response(code=200, description='Hotel list is Successfully return.', model=[hotel_dto])
     @hotel.response(code=404, description='Hotel list is empty')
     def get(self):
         hotelService = HotelService()
@@ -22,8 +22,8 @@ class HotelController(Resource):
         data = args.parse_args()
         hotel = hotelService.list(offset=data['page'], limit=data['limit'])
         if len(hotel) == 0:
-            return hotel, 404
-        return hotel, 200
+            return marshal(hotel, hotel_dto), 404
+        return marshal(hotel, hotel_dto), 200
 
     @hotel.doc('Create a Hotel')
     @hotel.expect(HotelDto.request())
@@ -42,7 +42,7 @@ class HotelController(Resource):
             hotel = hotelService.create(data['name'], data['stars'], data['daily'], city, data['status'])
         except Exception as ex:
             return HelpsDto.message(str(ex)), 400
-        return hotel, 201
+        return marshal(hotel, hotel_dto), 201
 
 
 @hotel.route('/<int:id>')
@@ -56,7 +56,7 @@ class HotelControllerId(Resource):
         hotel = hotelService.list_id(id)
         if hotel is None:
             return HelpsDto.message(f'Id not found, Id:{id} was provided.'), 404
-        return hotel, 200
+        return marshal(hotel, hotel_dto), 200
 
     @hotel.doc('Update a Hotel')
     @hotel.expect(HotelDto.request())
@@ -76,7 +76,7 @@ class HotelControllerId(Resource):
             , data['status'])
         except Exception as ex:
             return HelpsDto.message(str(ex)), 400
-        return hotel, 200
+        return marshal(hotel, hotel_dto), 200
 
     @hotel.doc('Delete a Hotel')
     @hotel.response(code=200, description='Hotel successfully removed.')
