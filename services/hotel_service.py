@@ -4,7 +4,7 @@ from models.hotel_model import HotelModel
 from models.city_model import CityModel
 
 
-class HotelRepository():
+class HotelService():
     def __init__(self) -> None:
         self.conn = Context()
     
@@ -15,8 +15,8 @@ class HotelRepository():
     def list_id(self, id:int) -> Union[HotelModel, None]:
         return self.conn.session.query(HotelModel).filter_by(id=id).first()
 
-    def create(self, name:str, stars:int, daily:float, city:CityModel) -> Union[HotelModel, Exception]:
-        hotel = HotelModel(name, stars, daily, city)
+    def create(self, name:str, stars:int, daily:float, city:CityModel, status:bool) -> Union[HotelModel, Exception]:
+        hotel = HotelModel(name, stars, daily, city, status=status)
         try:
             self.conn.session.add(hotel)
             self.conn.save()

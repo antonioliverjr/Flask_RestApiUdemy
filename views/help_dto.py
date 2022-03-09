@@ -1,23 +1,18 @@
-from marshmallow import Schema, fields, validates, ValidationError
+from flask_restx import reqparse, fields
 
 
-class MessageResponseDto(Schema):
-    message = fields.String(default='Success')
-
-
-class PaginationArgsDto(Schema):
-    page = fields.Integer(missing=1)
-    limit = fields.Integer(missing=25)
-
-    @validates('page')
-    def validate_page(self, value):
-        if value < 1:
-            raise ValidationError('Page is not a value reference.')
-
-    @validates('limit')
-    def validate_limit(self, value):
-        if value < 1:
-            raise ValidationError('Limit is not a value reference.')
-
-class RouteArgsDto(Schema):
-    id = fields.Integer()
+class HelpsDto:
+    @staticmethod
+    def pagination():
+        args = reqparse.RequestParser()
+        args.add_argument('page', type=int, default=1, help='Page value greater than 1', location='args')
+        args.add_argument('limit', type=int, default=25, help='limit value greater than 1', location='args')
+        return args
+    
+    
+    @staticmethod
+    def message():
+        message = {
+            'message': fields.String
+        }
+        return message

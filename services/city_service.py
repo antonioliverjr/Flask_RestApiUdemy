@@ -3,7 +3,7 @@ from data.context import Context
 from models.city_model import CityModel
 
 
-class CityRepository():
+class CityService():
     def __init__(self) -> None:
         self.conn = Context()
 
