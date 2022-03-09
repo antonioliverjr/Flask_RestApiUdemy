@@ -11,8 +11,8 @@ class HelpsDto:
     
     
     @staticmethod
-    def message():
+    def message(msg:fields.String):
         message = {
-            'message': fields.String
+            'message': msg
         }
         return message

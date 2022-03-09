@@ -9,7 +9,6 @@ from services.city_service import CityService
 api = server.api
 hotel = api.namespace('hotels', description="Hotels operations Get, Get/{id}, Post, Put, Delete")
 hotel_dto = hotel.model('hotel', HotelDto.response())
-#message_dto = hotel.model('message', HelpsDto.message())
 
 @hotel.route('/')
 class HotelController(Resource):
@@ -38,13 +37,11 @@ class HotelController(Resource):
         data = args.parse_args()
         city = cityService.search(data['city'])
         if city is None:
-            message = {'message': 'The City {} informed not registered.'.format(data['city'])}
-            return message, 404
+            return HelpsDto.message('The City {} informed not registered.'.format(data['city'])), 404
         try:
             hotel = hotelService.create(data['name'], data['stars'], data['daily'], city, data['status'])
         except Exception as ex:
-            message = {'message': str(ex)}
-            return message, 400
+            return HelpsDto.message(str(ex)), 400
         return hotel, 201
 
 
@@ -58,8 +55,7 @@ class HotelControllerId(Resource):
         hotelService = HotelService()
         hotel = hotelService.list_id(id)
         if hotel is None:
-            message = {'message': f'Id not found, Id:{id} was provided.'}
-            return message, 404
+            return HelpsDto.message(f'Id not found, Id:{id} was provided.'), 404
         return hotel, 200
 
     @hotel.doc('Update a Hotel')
@@ -74,14 +70,12 @@ class HotelControllerId(Resource):
         data = args.parse_args()
         city = cityService.search(data['city'])
         if city is None:
-            message = {'message': 'The City {} informed not registered.'.format(data['city'])}
-            return message, 404
+            return HelpsDto.message('The City {} informed not registered.'.format(data['city'])), 404
         try:
             hotel = hotelService.update(id, data['name'], data['stars'], data['daily'], city
             , data['status'])
         except Exception as ex:
-            message = {'message': str(ex)}
-            return message, 400
+            return HelpsDto.message(str(ex)), 400
         return hotel, 200
 
     @hotel.doc('Delete a Hotel')
@@ -94,9 +88,6 @@ class HotelControllerId(Resource):
             try:
                 hotelService.remove(id)
             except Exception as ex:
-                message = {'message': str(ex)}
-                return message, 400
-            message = {'message': 'The registration was successfully removed.'}
-            return message, 200
-        message = {'message': f'Id not found, Id: {id} was provided.'}
-        return message, 404
+                return HelpsDto.message(str(ex)), 400
+            return HelpsDto.message('The registration was successfully removed.'), 200
+        return HelpsDto.message(f'Id not found, Id: {id} was provided.'), 404

@@ -7,7 +7,6 @@ from services.city_service import CityService
 api = server.api
 city = api.namespace('cities', description="Cities operations Get, Get/{id}, Post, Put, Delete")
 city_dto = city.model('city', CityDto.response())
-#message_dto = city.model('message', HelpsDto.message())
 
 @city.route('/')
 class CityController(Resource):
@@ -34,13 +33,11 @@ class CityController(Resource):
         args = CityDto.request()
         data = args.parse_args()
         if cityService.search(data['name']):
-            message = {'message': '{} already registered.'.format(data['name'])}
-            return message, 400
+            return HelpsDto.message('{} already registered.'.format(data['name'])), 400
         try:
             city = cityService.create(data['name'], data['uf'])
         except Exception as ex:
-            message = {'message': str(ex)}
-            return message, 400
+            return HelpsDto.message(str(ex)), 400
         return city, 201
 
 @city.route('/<int:id>')
@@ -53,8 +50,7 @@ class CityControllerId(Resource):
         cityService = CityService()
         city = cityService.list_id(id)
         if city is None:
-            message = {'message': f'Id not found, Id: {id} was provided.'}
-            return message, 404
+            return HelpsDto.message(f'Id not found, Id: {id} was provided.'), 404
         return city, 200
 
     @city.doc('Uptade a City')
@@ -70,11 +66,9 @@ class CityControllerId(Resource):
             try:
                 city = cityService.update(id, **data)
             except Exception as ex:
-                message = {'message': str(ex)}
-                return message, 400
+                return HelpsDto.message(str(ex)), 400
             return city, 200
-        message = {'message': f'Id not found, Id: {id} was provided.'}
-        return message, 404
+        return HelpsDto.message(f'Id not found, Id: {id} was provided.'), 404
 
     @city.doc('Remove a City')
     @city.response(code=200, description='City successfully removed.')
@@ -86,9 +80,6 @@ class CityControllerId(Resource):
             try:
                 cityService.remove(id)
             except Exception as ex:
-                message = {'message': str(ex)}
-                return message, 400
-            message = {'message': 'The registration was successfully removed.'}
-            return message, 200
-        message = {'message': f'Id not found, Id: {id} was provided.'}
-        return message, 404
+                return HelpsDto.message(str(ex)), 400
+            return HelpsDto.message('The registration was successfully removed.'), 200
+        return HelpsDto.message(f'Id not found, Id: {id} was provided.'), 404
