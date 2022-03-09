@@ -8,8 +8,9 @@ class HotelRepository():
     def __init__(self) -> None:
         self.conn = Context()
     
-    def list(self) -> List[HotelModel]:
-        return self.conn.session.query(HotelModel).all()
+    def list(self, offset:int, limit:int) -> List[HotelModel]:
+        offset = (offset - 1) * limit
+        return self.conn.session.query(HotelModel).offset(offset).limit(limit).all()
     
     def list_id(self, id:int) -> Union[HotelModel, None]:
         return self.conn.session.query(HotelModel).filter_by(id=id).first()

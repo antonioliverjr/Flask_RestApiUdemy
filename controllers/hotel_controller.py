@@ -3,7 +3,7 @@ from flask_restful import Resource
 from flask_apispec import doc, use_kwargs, marshal_with
 from flask_apispec.views import MethodResource
 from views.hotel_dto import HotelRequestDto, HotelResponseDto
-from views.message_dto import MessageResponseDto
+from views.help_dto import MessageResponseDto, PaginationArgsDto
 from repositories.hotel_repository import HotelRepository
 from repositories.city_repository import CityRepository
 import json
@@ -12,17 +12,20 @@ import json
 @doc(tags=['Hotels'])
 class HotelController(MethodResource, Resource):
     @doc(description='List of Hotels.')
+    @use_kwargs(PaginationArgsDto, location='query')
     @marshal_with(HotelResponseDto(many=True), description='Success', code=200)
     @marshal_with(MessageResponseDto, description='Error', code=404)
-    def get(self):
+    @marshal_with(MessageResponseDto, description='Error Page or Limit not a value reference.', code=422)
+    def get(self, **kwargs):
         hotelRepository = HotelRepository()
-        result = hotelRepository.list()
+        data = PaginationArgsDto().load(kwargs)
+        result = hotelRepository.list(offset=data['page'], limit=data['limit'])
         if len(result) == 0:
             return result, 404
         return result, 200
     
     @doc(description='Create Hotel.')
-    @use_kwargs(HotelRequestDto)
+    @use_kwargs(HotelRequestDto, location='json')
     @marshal_with(HotelResponseDto, description='Success', code=201)
     @marshal_with(MessageResponseDto, description='Error', code=400)
     def post(self, **kwargs):
@@ -41,7 +44,7 @@ class HotelController(MethodResource, Resource):
         return result, 201
     
     
-@doc(tags=['Hotels/{Id}'])
+@doc(tags=['Hotels'])
 class HotelControllerId(MethodResource, Resource):
     @doc(description='Return Hotel.')
     @marshal_with(HotelResponseDto, description='Success', code=200)

@@ -7,8 +7,9 @@ class CityRepository():
     def __init__(self) -> None:
         self.conn = Context()
 
-    def list(self) -> List[CityModel]:
-        return self.conn.session.query(CityModel).all()
+    def list(self, offset:int, limit:int) -> List[CityModel]:
+        offset = (offset - 1) * limit
+        return self.conn.session.query(CityModel).offset(offset).limit(limit).all()
 
     def list_id(self, id:int) -> Union[CityModel, None]:
         return self.conn.session.query(CityModel).filter_by(id=id).first()

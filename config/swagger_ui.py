@@ -11,6 +11,9 @@ class SwaggerUi:
         app.config.update({
             'APISPEC_SPEC': APISpec(
                 title='Clean Python Base API',
+                version='v1',
+                openapi_version='3.0.0',
+                plugins=[MarshmallowPlugin()],
                 description='Criando modelo base API Clean Architeture',
                 termsOfService='',
                 contact={
@@ -19,12 +22,9 @@ class SwaggerUi:
                     'email': 'antoniobatistajr@gmail.com'
                 },
                 license={
-                    'name': 'MIT',
-                    'url': 'https://opensource.org/licenses/MIT'
+                'name': 'MIT',
+                'url': 'https://opensource.org/licenses/MIT'
                 },
-                version='v1',
-                plugins=[MarshmallowPlugin()],
-                openapi_version='3.0.0'
             ),
             'APISPEC_SWAGGER_URL': '/swagger-json/',
             'APISPEC_SWAGGER_UI_URL': '/swagger/'

@@ -3,23 +3,26 @@ from flask_restful import Resource
 from flask_apispec import doc, use_kwargs, marshal_with
 from flask_apispec.views import MethodResource
 from views.city_dto import CityRequestDto, CityResponseDto
-from views.message_dto import MessageResponseDto
+from views.help_dto import MessageResponseDto, RouteArgsDto,PaginationArgsDto
 from repositories.city_repository import CityRepository
 import json
 
 @doc(tags=['Cities'])
 class CityController(MethodResource, Resource):
     @doc(description='List of Cities')
+    @use_kwargs(PaginationArgsDto, location='query')
     @marshal_with(CityResponseDto(many=True), description='Success', code=200)
     @marshal_with(CityResponseDto(many=True), description='Error', code=404)
-    def get(self):
+    @marshal_with(MessageResponseDto, description='Error Page or Limit not a value reference.', code=422)
+    def get(self, **kwargs):
         cityRepository = CityRepository()
-        city = cityRepository.list()
+        data = PaginationArgsDto().load(kwargs)    
+        city = cityRepository.list(offset=data['page'], limit=data['limit'])
         if len(city) != 0:            
             return city, 200
         else:
             return city, 404
-    
+
     @doc(description='Create City.')
     @use_kwargs(CityRequestDto, location='json')
     @marshal_with(CityResponseDto, description='Success', code=201)
@@ -38,7 +41,7 @@ class CityController(MethodResource, Resource):
         return city, 201
 
 
-@doc(tags=['Cities/{Id}'])
+@doc(tags=['Cities'])
 class CityControllerId(MethodResource, Resource):
     @doc(description='Return City')
     @marshal_with(CityResponseDto, description='Success', code=200)
@@ -51,7 +54,7 @@ class CityControllerId(MethodResource, Resource):
             return result, 404
         return result, 200
         
-
+'''
     @doc(description='Update City.')
     @use_kwargs(CityRequestDto, location='json')
     @marshal_with(CityResponseDto, description='Success', code=200)
@@ -86,3 +89,4 @@ class CityControllerId(MethodResource, Resource):
             return result, 200
         result = {'message': f'Id não localizado, verifique Id:{id} foi o informado.'}
         return result, 404
+'''
