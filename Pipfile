@@ -6,10 +6,8 @@ name = "pypi"
 [packages]
 flask = "*"
 sqlalchemy = "*"
-flask-restful = "*"
 alembic = "*"
 python-decouple = "*"
-flask-apispec = "*"
 flask-restx = "*"
 
 [dev-packages]

@@ -13,18 +13,22 @@
 # Anotações do projeto
 
 > Bibliotecas Utilizadas
-- Flask
-- Flask_Restful
-- Flask_Apispec
-- Marshmallow
-- SQLAlchemy
-- Alembic
-- Python-Decouple
+- Flask (App)
+- Flask_Restx (Api e Swagger)
+- SQLAlchemy (Database)
+- Alembic (Migrations)
+- Python-Decouple (Env)
 
 > Comandos Bash
 ```bash
 alembic revision --autogenerate -m "<nome-da-migration>"
 alembic upgrade head
 ```
-
+> Estrutura de Projeto
+- main.py (Start)
+- config/app.py (Instance ServerApp)
+- controllers (Routers and Resource Methods)
+- services (Bussiness Aplication)
+- models (Domain)
+- data (Context)
 
