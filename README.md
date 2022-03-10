@@ -15,6 +15,7 @@
 > Bibliotecas Utilizadas
 - Flask (App)
 - Flask_Restx (Api e Swagger)
+- Inject (IoC e DI)
 - SQLAlchemy (Database)
 - Alembic (Migrations)
 - Python-Decouple (Env)
@@ -25,10 +26,12 @@ alembic revision --autogenerate -m "<nome-da-migration>"
 alembic upgrade head
 ```
 > Estrutura de Projeto
-- main.py (Start)
-- config/app.py (Instance ServerApp)
+- main.py (Instance Server)
+- config/settings.py (Configurações)
 - controllers (Routers and Resource Methods)
-- services (Bussiness Aplication)
-- models (Domain)
-- data (Context)
+- services (Bussiness)
+- config/dependency_injection.py (IoC e DI)
+- data (Context, Repositories, Interfaces)
+- entities (Domain)
+
 
