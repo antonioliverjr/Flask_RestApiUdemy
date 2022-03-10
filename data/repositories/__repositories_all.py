@@ -1,2 +1,4 @@
+from data.repositories.user_repository import UserRepository
+from data.repositories.role_repository import RoleRepository
 from data.repositories.hotel_repository import HotelRepository
 from data.repositories.city_repository import CityRepository
