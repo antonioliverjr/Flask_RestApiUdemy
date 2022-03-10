@@ -28,7 +28,8 @@ alembic upgrade head
 > Estrutura de Projeto
 - main.py (Instance Server)
 - config/settings.py (Configurações)
-- controllers (Routers and Resource Methods)
+- controllers <> models
+(Routers ou Resource) <> (DTOs ou ViewModels)
 - services (Bussiness)
 - config/dependency_injection.py (IoC e DI)
 - data (Context, Repositories, Interfaces)
