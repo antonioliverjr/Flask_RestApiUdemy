@@ -1,6 +1,6 @@
 from data.context import Context
-from models.identity.user_model import UserModel
-from models.identity.roles_model import RoleModel
+from entities.identity.user_entity import UserModel
+from entities.identity.roles_entity import RoleModel
 from decouple import config
 from werkzeug.security import generate_password_hash
 
@@ -29,7 +29,7 @@ class SeedUserRolesInitial:
                 pass
 
     def seed_users(self):
-        admin = config('ADMIN_API').lower()
+        admin = 'admin@api'
         admin_pass = config('PASS_ADMIN')
         if not self.conn.session.query(UserModel).filter(UserModel.username == admin).first():
             role_admin = self.conn.session.query(RoleModel).filter(RoleModel.role == 'ADMIN').first()
@@ -40,7 +40,7 @@ class SeedUserRolesInitial:
             except:
                 pass
 
-        user = config('USER_API').lower()
+        user = 'user@api'
         user_pass = config('PASS_USER')
         if not self.conn.session.query(UserModel).filter(UserModel.username == user).first():
             role_user = self.conn.session.query(RoleModel).filter(RoleModel.role == 'USER').first()

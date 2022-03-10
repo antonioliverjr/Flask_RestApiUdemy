@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from data.context import Base
-from models.identity.roles_model import RoleModel
+from entities.identity.roles_entity import RoleModel
 
 class UserModel(Base):
     __tablename__ = 'users'

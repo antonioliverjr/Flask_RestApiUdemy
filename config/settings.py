@@ -1,6 +1,7 @@
+from __future__ import annotations
 from flask import Flask
 from flask_restx import Api
-from config.token import Authenticate
+from config.authentication import Authenticate
 from services.identity.seed_user_roles import SeedUserRolesInitial
 
 
@@ -26,7 +27,7 @@ class Settings:
             authorizations=Authenticate.get_auth()
         )
         return api
-
+    
     @staticmethod
     def add_routes(api:Api, *args) -> Api:
         for arg in args:
@@ -42,4 +43,3 @@ class Settings:
     def seed_users():
         seed = SeedUserRolesInitial()
         seed.seed_users()
-        
