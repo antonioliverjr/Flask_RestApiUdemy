@@ -9,6 +9,7 @@ sqlalchemy = "*"
 alembic = "*"
 python-decouple = "*"
 flask-restx = "*"
+inject = "*"
 
 [dev-packages]
 

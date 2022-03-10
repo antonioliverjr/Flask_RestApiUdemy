@@ -1,7 +1,7 @@
 from typing import Union, List
 from data.context import Context
-from models.hotel_model import HotelModel
-from models.city_model import CityModel
+from entities.hotel_entity import HotelModel
+from entities.city_entity import CityModel
 
 
 class HotelService():

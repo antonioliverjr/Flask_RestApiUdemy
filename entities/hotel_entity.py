@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, String, Integer, Float, Boolean
 from sqlalchemy.orm import relationship
 from data.context import Base
-from models.city_model import CityModel
+from entities.city_entity import CityModel
 
 
 class HotelModel(Base):

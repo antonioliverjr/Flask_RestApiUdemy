@@ -1,5 +1,5 @@
 from flask_restx import reqparse, fields
-from views.city_dto import CityDto
+from models.city_dto import CityDto
 from controllers.city_controller import city_dto
 
 

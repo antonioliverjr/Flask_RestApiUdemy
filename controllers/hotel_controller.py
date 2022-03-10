@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, marshal
-from views.hotel_dto import HotelDto
-from views.help_dto import HelpsDto
+from models.hotel_dto import HotelDto
+from models.help_dto import HelpsDto
 from services.hotel_service import HotelService
 from services.city_service import CityService
 
