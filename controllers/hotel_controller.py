@@ -1,4 +1,5 @@
 from flask_restx import Namespace, Resource, marshal
+from config.dependecy_injection import DependencyInjection
 from models.hotel_dto import HotelDto
 from models.help_dto import HelpsDto
 from services.hotel_service import HotelService
@@ -7,6 +8,9 @@ from services.city_service import CityService
 
 hotel = Namespace('hotels', description="Hotels operations Get, Get/{id}, Post, Put, Delete")
 hotel_dto = hotel.model('hotel', HotelDto.response())
+DependencyInjection.register_ioc()
+hotelService = HotelService()
+cityService = CityService()
 
 @hotel.route('/')
 class HotelController(Resource):
@@ -15,10 +19,9 @@ class HotelController(Resource):
     @hotel.response(code=200, description='Hotel list is Successfully return.', model=[hotel_dto])
     @hotel.response(code=404, description='Hotel list is empty')
     def get(self):
-        hotelService = HotelService()
         args = HelpsDto.pagination()
         data = args.parse_args()
-        hotel = hotelService.list(offset=data['page'], limit=data['limit'])
+        hotel = hotelService.return_list_pagination(**data)
         if len(hotel) == 0:
             return marshal(hotel, hotel_dto), 404
         return marshal(hotel, hotel_dto), 200
@@ -29,15 +32,12 @@ class HotelController(Resource):
     @hotel.response(code=400, description='There was an error creating in the service.')
     @hotel.response(code=404, description='The City is not created in Cities.')
     def post(self):
-        hotelService = HotelService()
-        cityService = CityService()
         args = HotelDto.request()
         data = args.parse_args()
-        city = cityService.search(data['city'])
-        if city is None:
+        if not cityService.search_by_name(data['city']):
             return HelpsDto.message('The City {} informed not registered.'.format(data['city'])), 404
         try:
-            hotel = hotelService.create(data['name'], data['stars'], data['daily'], city, data['status'])
+            hotel = hotelService.create(**data)
         except Exception as ex:
             return HelpsDto.message(str(ex)), 400
         return marshal(hotel, hotel_dto), 201
@@ -50,8 +50,7 @@ class HotelControllerId(Resource):
     @hotel.response(code=200, description='Hotel successfully return.', model=hotel_dto)
     @hotel.response(code=404, description='The Hotel is not created in Hotels')
     def get(self, id:int):
-        hotelService = HotelService()
-        hotel = hotelService.list_id(id)
+        hotel = hotelService.return_by_id(id)
         if hotel is None:
             return HelpsDto.message(f'Id not found, Id:{id} was provided.'), 404
         return marshal(hotel, hotel_dto), 200
@@ -60,18 +59,17 @@ class HotelControllerId(Resource):
     @hotel.expect(HotelDto.request())
     @hotel.response(code=200, description='Hotel successfully return.', model=hotel_dto)
     @hotel.response(code=400, description='There was an error updating the service')
-    @hotel.response(code=404, description='The City is not created in Cities')
+    @hotel.response(code=404, description='The Hotel ou City is not created.')
     def put(self, id:int):
-        hotelService = HotelService()
-        cityService = CityService()
         args = HotelDto.request()
         data = args.parse_args()
-        city = cityService.search(data['city'])
-        if city is None:
-            return HelpsDto.message('The City {} informed not registered.'.format(data['city'])), 404
+        if not hotelService.return_by_id(id):
+            return HelpsDto.message(f'Id not found, Hotel Id: {id} was provided.'), 404
+        if cityService.search_by_name(data['city']):
+            return HelpsDto.message('The City {} informed not registered.'.format(data['city'])), 404        
+        data['id'] = id
         try:
-            hotel = hotelService.update(id, data['name'], data['stars'], data['daily'], city
-            , data['status'])
+            hotel = hotelService.update(**data)
         except Exception as ex:
             return HelpsDto.message(str(ex)), 400
         return marshal(hotel, hotel_dto), 200
@@ -81,8 +79,7 @@ class HotelControllerId(Resource):
     @hotel.response(code=400, description='Error in delete service')
     @hotel.response(code=404, description='The hotel is not created in Hotels')
     def delete(self, id:int):
-        hotelService = HotelService()
-        if hotelService.list_id(id):
+        if hotelService.return_by_id(id):
             try:
                 hotelService.remove(id)
             except Exception as ex:

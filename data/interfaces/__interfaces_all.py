@@ -1,1 +1,2 @@
+from data.interfaces.ihotel_repository import IHotelRepository
 from data.interfaces.icity_repository import ICityRepository

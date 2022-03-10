@@ -5,8 +5,9 @@ from data.repositories.__repositories_all import *
 class DependencyInjection:
     @staticmethod
     def __ioc_config(binder):
+        binder.bind(IHotelRepository, HotelRepository)
         binder.bind(ICityRepository, CityRepository)
 
     @staticmethod
     def register_ioc():
-        inject.configure(DependencyInjection.__ioc_config)
+        inject.configure_once(DependencyInjection.__ioc_config)

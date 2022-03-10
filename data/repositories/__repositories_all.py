@@ -1,1 +1,2 @@
+from data.repositories.hotel_repository import HotelRepository
 from data.repositories.city_repository import CityRepository
