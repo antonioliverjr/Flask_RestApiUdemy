@@ -29,9 +29,10 @@ class Settings:
         return api
     
     @staticmethod
-    def add_routes(api:Api, *args) -> Api:
-        for arg in args:
-            api.add_namespace(arg)
+    def add_routes(api:Api, *namespaces) -> Api:
+        for names_list in namespaces:
+            for namespace in names_list:
+                api.add_namespace(namespace)
         return api
 
     @staticmethod

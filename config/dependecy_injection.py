@@ -5,6 +5,8 @@ from data.repositories.__repositories_all import *
 class DependencyInjection:
     @staticmethod
     def __ioc_config(binder):
+        binder.bind(IUserRepository, UserRepository)
+        binder.bind(IRoleRepository, RoleRepository)
         binder.bind(IHotelRepository, HotelRepository)
         binder.bind(ICityRepository, CityRepository)
 
