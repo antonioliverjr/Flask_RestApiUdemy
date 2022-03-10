@@ -28,11 +28,11 @@ alembic upgrade head
 > Estrutura de Projeto
 - main.py (Instance Server)
 - config/settings.py (Configurações)
-- controllers <> models
-(Routers ou Resource) <> (DTOs ou ViewModels)
-- services (Bussiness)
-- config/dependency_injection.py (IoC e DI)
-- data (Context, Repositories, Interfaces)
-- entities (Domain)
+- controllers (Routers ou Resource) *Utiliza models e services* 
+- models (DTOs ou ViewModels) *Modelos relativos as entidades, desacopla a dependências destas na parte externa da aplicação*
+- services (Bussiness) *Utiliza as Interfaces*
+- config/dependency_injection.py (IoC e DI) *Permite as IoC nos Services*
+- data (Context, Repositories, Interfaces) *Realiza comunicação com DB e os métodos para os Services*
+- entities (Domain) *Entidades do projeto, modelam o DB*
 
 
