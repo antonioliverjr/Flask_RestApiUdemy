@@ -15,4 +15,4 @@ class IUserRepository(ABC):
     @abstractmethod
     def delete(self, id:int) -> Union[bool, Exception]: pass
     @abstractmethod
-    def search(self, username:str) -> Union[UserModel, None]: pass
+    def search(self, username:str, email:str=None) -> Union[UserModel, None]: pass

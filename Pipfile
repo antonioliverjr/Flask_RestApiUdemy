@@ -10,6 +10,7 @@ alembic = "*"
 python-decouple = "*"
 flask-restx = "*"
 inject = "*"
+pyjwt = "*"
 
 [dev-packages]
 

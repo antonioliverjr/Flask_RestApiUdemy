@@ -1,10 +1,10 @@
 from typing import Union, List
+from sqlalchemy import or_
 from data.context import Context
 from werkzeug.security import generate_password_hash
 from data.interfaces.iuser_repository import IUserRepository
 from data.repositories.role_repository import RoleRepository
 from entities.identity.user_entity import UserModel
-from entities.identity.roles_entity import RoleModel
 
 __roleRepository = RoleRepository()
 
@@ -60,5 +60,7 @@ class UserRepository(IUserRepository):
             return ex
         return True
 
-    def search(self, username:str) -> Union[UserModel, None]:
-        return self.conn.session.query(UserModel).filter(UserModel.username == username.lower()).first()
+    def search(self, username:str, email:str=None) -> Union[UserModel, None]:
+        return self.conn.session.query(UserModel).filter(
+            or_(UserModel.username == username, UserModel.email == email)
+        ).first()

@@ -1,7 +1,7 @@
 from __future__ import annotations
 from flask import Flask
 from flask_restx import Api
-from config.authentication import Authenticate
+from config.jwt import Authenticate
 from services.identity.seed_user_roles import SeedUserRolesInitial
 
 
@@ -23,8 +23,8 @@ class Settings:
             description='API baseada na Clean Architeture com Python',
             contact='Antonio Oliveira',
             contact_email='antoniobatistajr@gmail.com',
-            security=['http'],
-            authorizations=Authenticate.get_auth()
+            security=['apiKey'],
+            authorizations=Authenticate.setting()
         )
         return api
     
