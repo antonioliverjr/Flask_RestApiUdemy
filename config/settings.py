@@ -1,7 +1,7 @@
 from __future__ import annotations
 from flask import Flask
 from flask_restx import Api
-from config.jwt import Authenticate
+from config.jwt import Authorize
 from services.identity.seed_user_roles import SeedUserRolesInitial
 
 
@@ -24,14 +24,14 @@ class Settings:
             contact='Antonio Oliveira',
             contact_email='antoniobatistajr@gmail.com',
             security=['apiKey'],
-            authorizations=Authenticate.setting()
+            authorizations=Authorize.setting()
         )
         return api
     
     @staticmethod
     def add_routes(api:Api, *namespaces) -> Api:
-        for names_list in namespaces:
-            for namespace in names_list:
+        for list in namespaces:
+            for namespace in list:
                 api.add_namespace(namespace)
         return api
 

@@ -33,7 +33,7 @@ class SeedUserRolesInitial:
         admin_pass = config('PASS_ADMIN')
         if not self.conn.session.query(UserModel).filter(UserModel.username == admin).first():
             role_admin = self.conn.session.query(RoleModel).filter(RoleModel.role == 'ADMIN').first()
-            user_admin = UserModel(admin, generate_password_hash(admin_pass), 'ADMINISTRADOR', 'administrador@pythonflask.com', role_admin, status=True)
+            user_admin = UserModel(admin, generate_password_hash(admin_pass), 'ADMINISTRADOR', 'administrador@pythonflask.com', role_admin, ativo=True)
             try:
                 self.conn.session.add(user_admin)
                 self.conn.save()
@@ -44,7 +44,7 @@ class SeedUserRolesInitial:
         user_pass = config('PASS_USER')
         if not self.conn.session.query(UserModel).filter(UserModel.username == user).first():
             role_user = self.conn.session.query(RoleModel).filter(RoleModel.role == 'USER').first()
-            user_user = UserModel(user, generate_password_hash(user_pass), 'USUARIO','usuario@pythonflask.com', role_user, lastname='TESTE', status=True)
+            user_user = UserModel(user, generate_password_hash(user_pass), 'USUARIO','usuario@pythonflask.com', role_user, lastname='TESTE', ativo=True)
             try:
                 self.conn.session.add(user_user)
                 self.conn.save()

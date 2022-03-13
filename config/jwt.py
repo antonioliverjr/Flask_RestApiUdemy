@@ -11,16 +11,16 @@ DependencyInjection.register_ioc()
 authService = AutheticationService()
 jwtService = JwtService()
 
-class Authenticate:
+class Authorize:
     def token(*role:str):
         def decorator(f):
             @wraps(f)
             def wrapper(*args, **kwargs):
                 data = request.headers
-                if not data['Bearer']:
+                if not data['X-API-KEY']:
                     return HelpsDto.message('Unauthorize Token Not Found'), 401
                 try:
-                    token = jwtService.validation_token(data['Bearer'])
+                    token = jwtService.validation_token(data['X-API-KEY'])
                 except jwt.ExpiredSignatureError:
                     return HelpsDto.message('Expired Token'), 401
                 except jwt.InvalidAudienceError:
@@ -32,6 +32,8 @@ class Authenticate:
                 if role is not None:
                     if not user.role.role in [params.upper() for params in role]:
                         return HelpsDto.message('User does not have permission'), 401
+                if not user.ativo:
+                    return HelpsDto.message('User is not active'), 401
 
                 return f(*args, **kwargs)
             return wrapper
@@ -43,7 +45,7 @@ class Authenticate:
             'apiKey': {
                 'type': 'apiKey',
                 'in': 'header',
-                'name': 'Bearer'
+                'name': 'X-API-KEY'
             }
         }
         return authorizations

@@ -11,7 +11,7 @@ class IUserRepository(ABC):
     @abstractmethod
     def add(self, username:str, password:str, firstname:str, email:str, role:str, lastname:str=None) -> Union[UserModel, Exception]: pass
     @abstractmethod
-    def update(self, id:int, **user) -> Union[UserModel, Exception]: pass
+    def update(self, **user) -> Union[UserModel, Exception]: pass
     @abstractmethod
     def delete(self, id:int) -> Union[bool, Exception]: pass
     @abstractmethod

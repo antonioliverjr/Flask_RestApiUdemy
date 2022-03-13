@@ -33,8 +33,11 @@ class AutheticationService:
     def return_list_role(self) -> List[RoleModel]:
         return self.roleRepository.get()
     
-    def register_user(self, **data) -> UserModel:
+    def register_user(self, **data) -> Union[UserModel, Exception]:
         return self.userRepository.add(**data)
+
+    def update_user(self, **data) -> Union[UserModel, Exception]:
+        return self.userRepository.update(**data)
 
     def login_user(self, password:str, username:str=None, email:str=None) -> Union[UserModel, None]:
         user = self.userRepository.search(username, email)
