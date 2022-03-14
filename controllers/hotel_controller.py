@@ -20,6 +20,7 @@ class HotelController(Resource):
     @hotel.response(code=200, description='Hotel list is Successfully return.', model=[hotel_dto])
     @hotel.response(code=404, description='Hotel list is empty')
     def get(self):
+        '''Return Hotel List'''
         args = HelpsDto.pagination()
         data = args.parse_args()
         hotel = hotelService.return_list_pagination(**data)
@@ -34,6 +35,7 @@ class HotelController(Resource):
     @hotel.response(code=404, description='The City is not created in Cities.')
     @Authorize.token('user', 'admin')
     def post(self):
+        '''Register Hotel'''
         args = HotelDto.request()
         data = args.parse_args()
         if not cityService.search_by_name(data['city']):
@@ -53,6 +55,7 @@ class HotelControllerId(Resource):
     @hotel.response(code=404, description='The Hotel is not created in Hotels')
     @Authorize.token('user', 'admin')
     def get(self, id:int):
+        '''Return a Hotel'''
         hotel = hotelService.return_by_id(id)
         if hotel is None:
             return HelpsDto.message(f'Id not found, Id:{id} was provided.'), 404
@@ -65,6 +68,7 @@ class HotelControllerId(Resource):
     @hotel.response(code=404, description='The Hotel ou City is not created.')
     @Authorize.token('user', 'admin')
     def put(self, id:int):
+        '''Updating Hotel'''
         args = HotelDto.request()
         data = args.parse_args()
         if not hotelService.return_by_id(id):
@@ -84,6 +88,7 @@ class HotelControllerId(Resource):
     @hotel.response(code=404, description='The hotel is not created in Hotels')
     @Authorize.token('admin')
     def delete(self, id:int):
+        '''Remove Hotel'''
         if hotelService.return_by_id(id):
             try:
                 hotelService.remove(id)

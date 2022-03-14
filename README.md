@@ -19,6 +19,7 @@
 - SQLAlchemy (Database)
 - Alembic (Migrations)
 - Python-Decouple (Env)
+- PyJWT (Token Access)
 
 > Comandos Bash
 ```bash
@@ -28,6 +29,7 @@ alembic upgrade head
 > Estrutura de Projeto
 - main.py (Instance Server)
 - config/settings.py (Configurações)
+- config/jwt.py & services/identity/auth_service.py (Authorize) **Modulos responsáveis pelo registro e autorização dos usuários**
 - controllers (Routers ou Resource) **Utiliza models e services**
 - models (DTOs ou ViewModels) **Modelos relativos as entidades, desacopla a dependências destas na parte externa da aplicação**
 - services (Bussiness) **Utiliza as Interfaces**

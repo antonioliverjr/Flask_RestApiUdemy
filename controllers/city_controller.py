@@ -18,6 +18,7 @@ class CityController(Resource):
     @city.response(code=200, description='City list is Successfully return.', model=[city_dto])
     @city.response(code=404, description='City list is empty')
     def get(self):
+        '''Return City List'''
         args = HelpsDto.pagination()
         data = args.parse_args()
         city = cityService.return_list_pagination(**data)
@@ -32,6 +33,7 @@ class CityController(Resource):
     @city.response(code=400, description='There was an error creating in the service or the city already exists.')
     @Authorize.token('user', 'admin')
     def post(self):
+        '''Register City'''
         args = CityDto.request()
         data = args.parse_args()
         if cityService.search_by_name(data['name']):
@@ -50,6 +52,7 @@ class CityControllerId(Resource):
     @city.response(code=404, description='The City is not created in Cities')
     @Authorize.token('user', 'admin')
     def get(self, id:int):
+        '''Return a City'''
         city = cityService.return_by_id(id)
         if city is None:
             return HelpsDto.message(f'Id not found, Id: {id} was provided.'), 404
@@ -62,6 +65,7 @@ class CityControllerId(Resource):
     @city.response(code=404, description='The City is not created in Cities')
     @Authorize.token('user', 'admin')
     def put(self, id:int):
+        '''Updating City'''
         args = CityDto.request()
         data = args.parse_args()
         if cityService.return_by_id(id):
@@ -78,6 +82,7 @@ class CityControllerId(Resource):
     @city.response(code=404, description='The city is not created in Cities')
     @Authorize.token('admin')
     def delete(self, id:int):
+        '''Remove City'''
         if cityService.list_id(id):
             try:
                 cityService.remove(id)

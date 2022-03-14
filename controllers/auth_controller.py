@@ -54,7 +54,7 @@ class AdminController(Resource):
     @user.response(code=404, description='The User is not created in Users')
     @Authorize.token('admin')
     def put(self, id:int):
-        '''Update permission by user and active'''
+        '''Update User Permission and Activation'''
         args = AdminDto.request()
         data = args.parse_args()
         user = authService.return_user(id)
@@ -81,7 +81,7 @@ class AdminController(Resource):
     @user.response(code=404, description='The User is not created in Users')
     @Authorize.token('admin')
     def delete(self, id:int):
-        '''Remove a user'''
+        '''Remove User'''
         if authService.return_user(id):
             try: 
                 result = authService.delete_user(id)
@@ -98,6 +98,7 @@ class UserController(Resource):
     @user.response(code=201, description='User Successfully Create.', model=user_dto)
     @user.response(code=400, description='There was an error creating in the service.')
     def post(self):
+        '''Register User'''
         args = UserDto.request()
         req = args.parse_args()
         try:
@@ -114,8 +115,9 @@ class UserController(Resource):
 @user.route('/register/<int:id>')
 @user.param('id', 'User Id')
 class UserControllerId(Resource):
-    @user.doc('Confirmação de E-mail')
+    @user.doc(False)
     def get(self, id:int):
+        '''Confirmed E-mail'''
         pass
 
     @user.doc('Updating User')
@@ -125,6 +127,7 @@ class UserControllerId(Resource):
     @user.response(code=404, description='The User is not created in Users')
     @Authorize.token('user',user_confirmed=True)
     def put(self, id:int):
+        '''Updating User'''
         args = UserDto.request_put()
         req = args.parse_args()
         try:
@@ -149,6 +152,7 @@ class TokenController(Resource):
     @token.response(code=400, description='Login data missing')
     @token.response(code=401, description='Authorization Error')
     def post(self):
+        '''Request Generation Token'''
         args = TokenDto.request()
         data = args.parse_args()
         if data['username'] is None and data['email'] is None:
