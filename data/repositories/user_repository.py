@@ -30,11 +30,26 @@ class UserRepository(IUserRepository):
         return self.search(username)
 
     def update(self, **user) -> Union[UserModel, Exception]:
+        if user.get('ativo'):
+            try:
+                self.conn.session.query(UserModel).filter_by(id=user['id']).update(
+                    {
+                        'username': user['username'].lower(),
+                        'firstname': user['firstname'].upper(),
+                        'email': user['email'].lower(),
+                        'lastname': user['lastname'].upper(),
+                        'role_id': user['role_id'],
+                        'ativo': user['ativo'] 
+                    }, synchronize_session=False
+                )
+                self.conn.save()
+            except Exception as ex:
+                    return ex
+        
         try:
             self.conn.session.query(UserModel).filter_by(id=user['id']).update(
                 {
                     'username': user['username'].lower(),
-                    'password': generate_password_hash(user['password']),
                     'firstname': user['firstname'].upper(),
                     'email': user['email'].lower(),
                     'lastname': user['lastname'].upper(),

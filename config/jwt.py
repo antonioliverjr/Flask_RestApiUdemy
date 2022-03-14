@@ -12,11 +12,12 @@ authService = AutheticationService()
 jwtService = JwtService()
 
 class Authorize:
-    def token(*role:str):
+    def token(*role:str, user_confirmed:bool=False):
         def decorator(f):
             @wraps(f)
             def wrapper(*args, **kwargs):
                 data = request.headers
+                id_params = kwargs.get('id')
                 if not data['X-API-KEY']:
                     return HelpsDto.message('Unauthorize Token Not Found'), 401
                 try:
@@ -29,12 +30,14 @@ class Authorize:
                 user = authService.check_username(token['username'])
                 if user is None:
                     return HelpsDto.message('User Not Found'), 401
+                if user_confirmed:
+                    if not user.id == id_params:
+                        return HelpsDto.message('User does not have permission, to change another user'), 401
                 if role is not None:
                     if not user.role.role in [params.upper() for params in role]:
                         return HelpsDto.message('User does not have permission'), 401
                 if not user.ativo:
                     return HelpsDto.message('User is not active'), 401
-
                 return f(*args, **kwargs)
             return wrapper
         return decorator

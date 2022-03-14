@@ -16,6 +16,15 @@ class UserDto:
         return args
 
     @staticmethod
+    def request_put():
+        args = reqparse.RequestParser()
+        args.add_argument('username', type=str, required=True, trim=True, help='Report a Username is required', location='json')
+        args.add_argument('firstname', type=str, required=True, help='Firstname is Required', location='json')
+        args.add_argument('lastname', type=str, default=None, help='Lastname is not required', location='json')
+        args.add_argument('email', type=str, required=True, help='Email is required', location='json')
+        return args
+
+    @staticmethod
     def response():
         response = {
             'id': fields.Integer,
@@ -27,6 +36,15 @@ class UserDto:
             'ativo': fields.Boolean
         }
         return response
+
+
+class AdminDto:
+    @staticmethod
+    def request():
+        args = reqparse.RequestParser()
+        args.add_argument('role', type=str, required=True, trim=True, help='Role is required', location='json')
+        args.add_argument('ativo', type=bool, required=True, help='Active is required', location='json')
+        return args
 
 class ValidateUser(Schema):
     username =  attr.String()
