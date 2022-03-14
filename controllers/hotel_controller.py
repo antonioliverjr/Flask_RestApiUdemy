@@ -4,6 +4,7 @@ from models.hotel_dto import HotelDto
 from models.help_dto import HelpsDto
 from services.hotel_service import HotelService
 from services.city_service import CityService
+from config.jwt import Authorize
 
 
 hotel = Namespace('hotels', description="Hotels operations Get, Get/{id}, Post, Put, Delete")
@@ -31,6 +32,7 @@ class HotelController(Resource):
     @hotel.response(code=201, description='Hotel Successfully Create.', model=hotel_dto)
     @hotel.response(code=400, description='There was an error creating in the service.')
     @hotel.response(code=404, description='The City is not created in Cities.')
+    @Authorize.token('user', 'admin')
     def post(self):
         args = HotelDto.request()
         data = args.parse_args()
@@ -49,6 +51,7 @@ class HotelControllerId(Resource):
     @hotel.doc('Return a Hotel')
     @hotel.response(code=200, description='Hotel successfully return.', model=hotel_dto)
     @hotel.response(code=404, description='The Hotel is not created in Hotels')
+    @Authorize.token('user', 'admin')
     def get(self, id:int):
         hotel = hotelService.return_by_id(id)
         if hotel is None:
@@ -60,6 +63,7 @@ class HotelControllerId(Resource):
     @hotel.response(code=200, description='Hotel successfully return.', model=hotel_dto)
     @hotel.response(code=400, description='There was an error updating the service')
     @hotel.response(code=404, description='The Hotel ou City is not created.')
+    @Authorize.token('user', 'admin')
     def put(self, id:int):
         args = HotelDto.request()
         data = args.parse_args()
@@ -78,6 +82,7 @@ class HotelControllerId(Resource):
     @hotel.response(code=200, description='Hotel successfully removed.')
     @hotel.response(code=400, description='Error in delete service')
     @hotel.response(code=404, description='The hotel is not created in Hotels')
+    @Authorize.token('admin')
     def delete(self, id:int):
         if hotelService.return_by_id(id):
             try:
